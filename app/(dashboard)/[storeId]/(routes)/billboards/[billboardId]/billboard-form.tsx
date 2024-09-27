@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { storeDelete } from "@/actions/store-delete";
+import { storeDelete } from "@/actions/store";
 import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/alert-model";
 import { useOrigin } from "@/hooks/use-origin";

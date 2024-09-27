@@ -12,7 +12,7 @@ import { formSchema } from "@/zod/validator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { store } from "@/actions/store";
+import { storeCreate } from "@/actions/store";
 
 
 export const StoreModal = () => {
@@ -30,7 +30,7 @@ export const StoreModal = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try{
             setLoading(true);
-            store(values).
+            storeCreate(values).
             then((data)=> {
                 console.log(data);
                 window.location.assign(`/${data.id}`)
