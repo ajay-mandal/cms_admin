@@ -84,3 +84,12 @@ export const storeSchema = z.object({
         message: "Name is Required"
     })
 })
+
+export const billboardSchema = z.object({
+    label: z.string().min(1, {
+        message: "Label is Required"
+    }),
+    imageUrl: z.string().min(1,{
+        message: "ImageUrl is required"
+    })
+})

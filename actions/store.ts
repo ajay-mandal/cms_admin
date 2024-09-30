@@ -8,14 +8,17 @@ import { currentUserServerSide } from "@/hooks/currentUserServerSide";
 
 export const storeCreate = async (values: z.infer<typeof storeSchema>) => {
 
-    const validatedFields = storeSchema.safeParse(values);
+    const user = await currentUserServerSide();
+    if (!user) {
+        return { error: "Unauthenticated"};
+    }
 
+    const validatedFields = storeSchema.safeParse(values);
     if(!validatedFields.success) {
         return {error: "Invalid fields!"}
     }
 
     const { name } = validatedFields.data;
-    const user = await currentUserServerSide();
 
     const newStore = await db.store.create({
         data: {
@@ -32,14 +35,17 @@ export const storeCreate = async (values: z.infer<typeof storeSchema>) => {
 
 export const storeUpdate = async (params: string, values: z.infer<typeof storeSchema>) => {
 
-    const validatedFields = storeSchema.safeParse(values);
+    const user = await currentUserServerSide();
+    if (!user) {
+        return { error: "Unauthenticated"};
+    }
 
+    const validatedFields = storeSchema.safeParse(values);
     if(!validatedFields.success) {
         return {error: "Invalid fields!"}
     }
 
     const { name } = validatedFields.data;
-    const user = await currentUserServerSide();
 
     const updateStore = await db.store.updateMany({
         where: {

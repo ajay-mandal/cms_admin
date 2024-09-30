@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { storeDelete } from "@/actions/store";
+import { billboardCreate, billboardUpdate, billboardDelete } from "@/actions/billboard";
 import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/alert-model";
 import { useOrigin } from "@/hooks/use-origin";
@@ -62,9 +62,13 @@ export const BillboardForm: React.FC<BillboardProps> = ({
     const onSubmit = async(values: BillboardValues) => {
         try{
             setLoading(true);
-            // await storeUpdate(`${params.storeId}`,values)
+            if(initialData) {
+                await billboardUpdate(`${params.storeId}`,`${params.billboardId}`, values)
+            } else {
+                await billboardCreate(`${params.storeId}`, values)
+            }
             route.refresh();
-            toast.success("Store updated.")
+            toast.success(toastMessage)
         }catch (error) {
             toast.error("Something went wrong.")
         } finally {
@@ -75,12 +79,12 @@ export const BillboardForm: React.FC<BillboardProps> = ({
     const onDelete = async() => {
         try{
             setLoading(true);
-            // await storeDelete(`${params.storeId}`)
+            await billboardDelete(`${params.storeId}`,`${params.billboardId}`)
             route.refresh();
             route.push("/");
-            toast.success("Store deleted.")
+            toast.success("Billboard deleted.")
         }catch (error) {
-            toast.error("Make sure you removed all products and categories first.");
+            toast.error("Make sure you removed all categories using this billboard first.");
         } finally {
             setLoading(false);
             setOpen(false);
