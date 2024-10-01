@@ -47,7 +47,7 @@ export const BillboardForm: React.FC<BillboardProps> = ({
     const [loading, setLoading] = useState(false);
 
     const title = initialData ? "Edit billboard" : "Create billboard";
-    const description = initialData ? "Edit s billboard" : "Add a new billboard";
+    const description = initialData ? "Edit a billboard" : "Add a new billboard";
     const toastMessage = initialData ? "Billboard updated." : "Billboard created.";
     const action = initialData ? "Save changes" : "Create";
 
