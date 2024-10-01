@@ -68,6 +68,7 @@ export const BillboardForm: React.FC<BillboardProps> = ({
                 await billboardCreate(`${params.storeId}`, values)
             }
             route.refresh();
+            route.push(`/${params.storeId}/billboards`)
             toast.success(toastMessage)
         }catch (error) {
             toast.error("Something went wrong.")
