@@ -6,17 +6,16 @@ import { Trash } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
 import { billboardCreate, billboardUpdate, billboardDelete } from "@/actions/billboard";
-import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/alert-model";
-import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
@@ -41,7 +40,6 @@ export const BillboardForm: React.FC<BillboardProps> = ({
 
     const params = useParams();
     const route = useRouter();
-    const origin = useOrigin();
 
     const [open, setOpen ] = useState(false);
     const [loading, setLoading] = useState(false);
