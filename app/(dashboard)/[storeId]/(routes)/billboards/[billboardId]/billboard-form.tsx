@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { Billboard } from "@prisma/client";
 import { Trash } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
@@ -80,7 +80,7 @@ export const BillboardForm: React.FC<BillboardProps> = ({
             setLoading(true);
             await billboardDelete(`${params.storeId}`,`${params.billboardId}`)
             route.refresh();
-            route.push("/");
+            route.push(`/${params.storeId}/billboards`);
             toast.success("Billboard deleted.")
         }catch (error) {
             toast.error("Make sure you removed all categories using this billboard first.");

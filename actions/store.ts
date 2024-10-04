@@ -8,75 +8,63 @@ import { currentUserServerSide } from "@/hooks/currentUserServerSide";
 
 export const storeCreate = async (values: z.infer<typeof storeSchema>) => {
 
-    try{
-        const user = await currentUserServerSide();
-        if (!user) {
-            return { error: "Unauthenticated"};
+    const user = await currentUserServerSide();
+    if (!user) {
+        return { error: "Unauthenticated"};
+    }
+
+    const validatedFields = storeSchema.safeParse(values);
+    if(!validatedFields.success) {
+        return {error: "Invalid fields!"}
+    }
+
+    const { name } = validatedFields.data;
+
+    const newStore = await db.store.create({
+        data: {
+            name,
+            userId: user?.id || ""
         }
+    });
 
-        const validatedFields = storeSchema.safeParse(values);
-        if(!validatedFields.success) {
-            return {error: "Invalid fields!"}
-        }
-
-        const { name } = validatedFields.data;
-
-        const newStore = await db.store.create({
-            data: {
-                name,
-                userId: user?.id || ""
-            }
-        });
-
-        return {
-            id: newStore.id
-        }
-    }catch (error) {
-        console.log(`[STORE_CREATE]`, error);
+    return {
+        id: newStore.id
     }
 
 }
 
 export const storeUpdate = async (params: string, values: z.infer<typeof storeSchema>) => {
 
-    try{
-        const user = await currentUserServerSide();
-        if (!user) {
-            return { error: "Unauthenticated"};
-        }
-
-        const validatedFields = storeSchema.safeParse(values);
-        if(!validatedFields.success) {
-            return {error: "Invalid fields!"}
-        }
-
-        const { name } = validatedFields.data;
-
-        const updateStore = await db.store.updateMany({
-            where: {
-                id: params,
-                userId: user?.id
-            },
-            data: {
-                name
-            }
-        });
-    }catch (error) {
-        console.log(`[STORE_UPDATE]`, error);
+    const user = await currentUserServerSide();
+    if (!user) {
+        return { error: "Unauthenticated"};
     }
+
+    const validatedFields = storeSchema.safeParse(values);
+    if(!validatedFields.success) {
+        return {error: "Invalid fields!"}
+    }
+
+    const { name } = validatedFields.data;
+
+    const updateStore = await db.store.updateMany({
+        where: {
+            id: params,
+            userId: user?.id
+        },
+        data: {
+            name
+        }
+    });
 }
 
 export const storeDelete = async (params: string) => {
-    try{
-        const user = await currentUserServerSide();
+    const user = await currentUserServerSide();
 
-        await db.store.deleteMany({
-            where: {
-                id: params,
-                userId: user?.id
-            }
-        });
-    }catch (error) {
-        console.log(`[STORE_DELETE]`, error);
-    }
+    await db.store.deleteMany({
+        where: {
+            id: params,
+            userId: user?.id
+        }
+    });
 }
