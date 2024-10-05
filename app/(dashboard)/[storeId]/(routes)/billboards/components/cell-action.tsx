@@ -4,8 +4,6 @@ import React, { useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { billboardDelete } from "@/actions/billboard";
-
 import {
     Copy, 
     Edit, 
@@ -24,6 +22,7 @@ import {
 import { BillboardColumn } from "./columns"
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-model";
+import axios from "axios";
 
 
 interface CellActionProps {
@@ -51,7 +50,7 @@ export const CellAction: React.FC<CellActionProps> = ({
     const onDelete = async() => {
         try{
             setLoading(true);
-            await billboardDelete(`${params.storeId}`,`${data.id}`)
+            await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
             route.refresh();
             toast.success("Billboard deleted.")
         }catch (error) {

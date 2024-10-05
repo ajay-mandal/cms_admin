@@ -8,13 +8,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { billboardCreate, billboardUpdate, billboardDelete } from "@/actions/billboard";
 import { AlertModal } from "@/components/modals/alert-model";
 import ImageUpload from "@/components/ui/image-upload";
 
@@ -61,9 +61,9 @@ export const BillboardForm: React.FC<BillboardProps> = ({
         try{
             setLoading(true);
             if(initialData) {
-                await billboardUpdate(`${params.storeId}`,`${params.billboardId}`, values)
+                await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, values);
             } else {
-                await billboardCreate(`${params.storeId}`, values)
+                await axios.post(`/api/${params.storeId}/billboards`, values);
             }
             route.refresh();
             route.push(`/${params.storeId}/billboards`)
@@ -78,7 +78,7 @@ export const BillboardForm: React.FC<BillboardProps> = ({
     const onDelete = async() => {
         try{
             setLoading(true);
-            await billboardDelete(`${params.storeId}`,`${params.billboardId}`)
+            await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
             route.refresh();
             route.push(`/${params.storeId}/billboards`);
             toast.success("Billboard deleted.")
@@ -155,7 +155,6 @@ export const BillboardForm: React.FC<BillboardProps> = ({
                     </Button>
                 </form>
             </Form>
-            <Separator />
         </>
     )
 }

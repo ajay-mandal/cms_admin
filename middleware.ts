@@ -20,6 +20,8 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+    const isApiGetRoute = nextUrl.pathname.startsWith('/api') && req.method === 'GET';
+
     if(isApiAuthRoute) {
         return;
     }
@@ -31,7 +33,10 @@ export default auth((req) => {
         return;
     }
 
-    if(!isLoggedIn && !isPublicRoute) {
+    if(isPublicRoute || isApiGetRoute) {
+        return;
+    }
+    if(!isLoggedIn) {
         let callbackUrl = nextUrl.pathname;
         if(nextUrl.search) {
             callbackUrl += nextUrl.search;

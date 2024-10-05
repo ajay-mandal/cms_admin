@@ -8,6 +8,8 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { BillboardColumn, columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
+import React from "react";
+import { ApiList } from "@/components/ui/api-list";
 
 interface BillboardClientProps {
     data: BillboardColumn[]
@@ -20,7 +22,7 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
     const params = useParams();
 
     return ( 
-        <div>
+        <>
             <div className="flex justify-between items-center">
                 <Heading 
                 title={`Billboards (${data.length})`}
@@ -33,7 +35,10 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
             </div>
             <Separator />
             <DataTable columns={columns} data={data} searchKey="label"/>
-        </div>
+            <Heading title="API" description="API calls for Billboards"/>
+            <Separator />
+            <ApiList entityIdName="billboardId" entityName="billboards"/>
+        </>
     );
 }
  

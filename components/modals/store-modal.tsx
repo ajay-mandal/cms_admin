@@ -12,7 +12,7 @@ import { formSchema } from "@/zod/validator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { storeCreate } from "@/actions/store";
+import axios from "axios";
 
 
 export const StoreModal = () => {
@@ -30,12 +30,10 @@ export const StoreModal = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try{
             setLoading(true);
-            storeCreate(values).
-            then((data)=> {
-                console.log(data);
-                window.location.assign(`/${data.id}`)
+            await axios.post(`/api/stores`, values).
+            then((response)=> {
+                window.location.assign(`/${response.data.id}`)
             })
-            
         } catch (error) {
             toast.error("Something went wrong.")
         } finally {

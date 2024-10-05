@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useOrigin } from "@/hooks/use-origin";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -22,8 +23,6 @@ import {
     FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { storeUpdate } from "@/actions/store";
-import { storeDelete } from "@/actions/store";
 import { AlertModal } from "@/components/modals/alert-model";
 import { ApiAlert } from "@/components/ui/api-alert";
 
@@ -59,7 +58,7 @@ export const SettingForm: React.FC<SettingFormProps> = ({
     const onSubmit = async(values: SettingFormValues) => {
         try{
             setLoading(true);
-            await storeUpdate(`${params.storeId}`,values)
+            await axios.patch(`/api/stores/${params.storeId}`, values)
             route.refresh();
             toast.success("Store updated.")
         }catch (error) {
@@ -72,7 +71,7 @@ export const SettingForm: React.FC<SettingFormProps> = ({
     const onDelete = async() => {
         try{
             setLoading(true);
-            await storeDelete(`${params.storeId}`)
+            await axios.delete(`/api/stores/${params.storeId}`)
             route.refresh();
             route.push("/");
             toast.success("Store deleted.")
