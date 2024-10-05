@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 
 import { db } from "@/lib/db";
-import { BillboardClient } from "./client";
-import { BillboardColumn } from "./columns";
+import { BillboardClient } from "./components/client";
+import { BillboardColumn } from "./components/columns";
 
 const BillboardsPage = async({
     params

@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { Store } from "@prisma/client";
 import { Trash, X } from "lucide-react";
-import { useState } from "react";
+import React,{ useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useOrigin } from "@/hooks/use-origin";
@@ -13,7 +13,14 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { 
+    Form, 
+    FormControl, 
+    FormField, 
+    FormItem, 
+    FormLabel, 
+    FormMessage
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { storeUpdate } from "@/actions/store";
 import { storeDelete } from "@/actions/store";
@@ -79,12 +86,12 @@ export const SettingForm: React.FC<SettingFormProps> = ({
 
     return (
         <>
-        <AlertModal 
-        isOpen={open}
-        onClose={()=>setOpen(false)}
-        onConfirm={onDelete}
-        loading={loading}
-        />
+            <AlertModal 
+            isOpen={open}
+            onClose={()=>setOpen(false)}
+            onConfirm={onDelete}
+            loading={loading}
+            />
             <div className="flex items-center justify-between">
                 <Heading
                 title="Settings"
