@@ -55,7 +55,14 @@ const ImageUpload: React.FC<ImageUploadProps> =({
                     </div>
                 ))}
             </div>
-            <CldUploadWidget  onSuccess={onUpload} uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}>
+            <CldUploadWidget  
+                onSuccess={onUpload} 
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                options={{
+                    resourceType: "image",
+                    clientAllowedFormats: ["jpg", "jpeg", "png", "gif"],
+                  }}
+                >
                 {({open}) => {
                     const onClick = () => {
                         open();

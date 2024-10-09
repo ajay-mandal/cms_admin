@@ -163,7 +163,7 @@ model Product {
   name            String
   price           Decimal
   isFeatured      Boolean     @default(false)
-  isAchieved      Boolean     @default(false)
+  isArchived      Boolean     @default(false)
   sizeId          String
   size            Size        @relation(fields: [sizeId], references: [id])
   colorId         String
@@ -184,7 +184,7 @@ model Image {
   productId     String
   product       Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
   url           String
-  reatedAt      DateTime    @default(now())
+  createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
   @@index([productId])
