@@ -4,29 +4,35 @@ import { NextResponse } from "next/server";
 
 export async function GET (
     req: Request,
-    { params }: {params: {billboardId: string}}
+    { params }: {params: {productId: string}}
 ) {
     try{
-        if(!params.billboardId) {
-            return new NextResponse("Billboard ID is required", {status: 400});
+        if(!params.productId) {
+            return new NextResponse("Product id is required", {status: 400});
         }
     
-        const billboard = await db.billboard.findUnique({
+        const product = await db.product.findUnique({
             where: {
-                id: params.billboardId
+                id: params.productId
+            },
+            include: {
+                images: true,
+                category: true,
+                size: true,
+                color: true
             }
         });
 
-        return NextResponse.json(billboard);
+        return NextResponse.json(product);
     } catch (error) {
-        console.log('[BILLBOARD_GET]',error);
+        console.log('[PRODUCT_GET]',error);
         return new NextResponse("Internal error", {status: 500});
     }
 }
 
 export async function PATCH (
     req: Request,
-    { params }: {params: { storeId: string, billboardId: string}}
+    { params }: {params: { storeId: string, productId: string}}
 ) {
     try{
         const user = await currentUserServerSide();
@@ -35,16 +41,29 @@ export async function PATCH (
         }
     
         const body = await req.json();
-        const { label, imageUrl } = body;
+        const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived } = body;
 
-        if(!label) {
-            return new NextResponse("Label is required", {status: 400});
+        if(!name) {
+            return new NextResponse("Name is required", {status: 400});
         }
-        if(!imageUrl) {
-            return new NextResponse("Image URL is required", {status: 400});
+
+        if(!images || !images.length) {
+            return new NextResponse("Images are required", {status: 400});
         }
-        if(!params.billboardId) {
-            return new NextResponse("Billboard ID is required", {status: 400});
+        if(!price) {
+            return new NextResponse("Price is required", {status: 400});
+        }
+        if(!categoryId) {
+            return new NextResponse("categoryId is required", {status: 400});
+        }
+        if(!colorId) {
+            return new NextResponse("colorId is required", {status: 400});
+        }
+        if(!sizeId) {
+            return new NextResponse("sizeId is required", {status: 400});
+        }
+        if(!params.productId) {
+            return new NextResponse("product ID is required", {status: 400});
         }
 
         const storeByUserId = await db.store.findFirst({
@@ -58,26 +77,49 @@ export async function PATCH (
             return new NextResponse("Unauthorized", {status: 403})
         }
     
-        const updateBillboard = await db.billboard.updateMany({
+        await db.product.update({
             where: {
-                id: params.billboardId,
+                id: params.productId,
             },
             data: {
-                label,
-                imageUrl
+                name, 
+                price, 
+                categoryId, 
+                colorId, 
+                sizeId, 
+                images: {
+                    deleteMany: {}
+                },
+                isFeatured, 
+                isArchived
             }
         });
 
-        return NextResponse.json(updateBillboard);
+        const updateProduct = await db.product.update({
+            where: {
+                id: params.productId
+            },
+            data: {
+                images: {
+                    createMany: {
+                        data: [
+                            ...images.map((image: { url: string}) => image)
+                        ]
+                    }
+                },
+            }
+        })
+
+        return NextResponse.json(updateProduct);
     } catch (error) {
-        console.log('[BILLBOARD_PATCH]',error);
+        console.log('[PRODUCT_PATCH]',error);
         return new NextResponse("Internal error", {status: 500});
     }
 }
 
 export async function DELETE (
     req: Request,
-    { params }: {params: { storeId: string, billboardId: string}}
+    { params }: {params: { storeId: string, productId: string}}
 ) {
     try{
         const user = await currentUserServerSide();
@@ -85,8 +127,8 @@ export async function DELETE (
             return new NextResponse("Unauthenticated", {status: 401});
         }
 
-        if(!params.billboardId) {
-            return new NextResponse("Billboard ID is required", {status: 400});
+        if(!params.productId) {
+            return new NextResponse("Product ID is required", {status: 400});
         }
 
         const storeByUserId = await db.store.findFirst({
@@ -100,15 +142,15 @@ export async function DELETE (
             return new NextResponse("Unauthorized", {status: 403})
         }
     
-        const deletedBillboard = await db.billboard.deleteMany({
+        const deletedProduct = await db.product.deleteMany({
             where: {
-                id: params.billboardId
+                id: params.productId
             }
         });
 
-        return NextResponse.json(deletedBillboard);
+        return NextResponse.json(deletedProduct);
     } catch (error) {
-        console.log('[BILLBOARD_DELETE]',error);
+        console.log('[PRODUCT_DELETE]',error);
         return new NextResponse("Internal error", {status: 500});
     }
 }
