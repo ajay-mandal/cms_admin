@@ -20,7 +20,7 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    const isApiGetRoute = nextUrl.pathname.startsWith('/api') && req.method === 'GET' || req.method === 'OPTIONS' || req.method==="POST";
+    const isApiGetRoute = nextUrl.pathname.startsWith('/api') && req.method === 'GET' || req.method === 'OPTIONS' || req.method==="POST" || req.method==="PUT";
 
     if(isApiAuthRoute) {
         return;
