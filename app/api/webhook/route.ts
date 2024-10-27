@@ -16,7 +16,7 @@ export async function POST(req: Request) {
             body,
             signature,
             process.env.STRIPE_WEBHOOK_SECRET!
-        )
+        );
     } catch (error: any) {
         return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
     }
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     const addressString = addressComponents.filter((c) => c !== null).join(', ');
 
-    if(event.type === "checkout.session.completed") {
+    if (event.type === "checkout.session.completed") {
         const order = await db.order.update({
             where: {
                 id: session?.metadata?.orderId,
@@ -52,16 +52,23 @@ export async function POST(req: Request) {
 
         const productsIds = order.orderItems.map((orderItem) => orderItem.productId);
 
-        await db.product.updateMany({
-            where: {
-                id: {
-                    in: [...productsIds]
-                }
-            },
-            data: {
-                isArchived: true
+        await Promise.all(productsIds.map(async (productId) => {
+            const product = await db.product.findUnique({
+                where: { id: productId },
+                select: { quantity: true }
+            });
+
+            if (product) {
+                const newQuantity = product.quantity - 1;
+                await db.product.update({
+                    where: { id: productId },
+                    data: {
+                        quantity: newQuantity,
+                        isArchived: newQuantity === 0
+                    }
+                });
             }
-        });
+        }));
     }
-    return new NextResponse(null, { status: 200} );
+    return new NextResponse(null, { status: 200 });
 }
