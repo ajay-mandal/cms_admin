@@ -7,8 +7,22 @@ import "./globals.css";
 import { ModalProvider } from "@/providers/modal-provider";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Admin Dashboard",
+  title: "CMS Admin",
+  description: "Admin panel for store and product management. Single dashboard for multiple store management.",
+  icons: {
+    icon: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/csm-dark.svg",
+        href: "/cms-dark.svg"
+      },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/cms-light.svg",
+        href: "/cms-light.svg"
+      }
+    ]
+  }
 };
 
 export default function RootLayout({
@@ -20,9 +34,9 @@ export default function RootLayout({
     <SessionProvider>
       <html lang="en">
         <body>
-          <ModalProvider />
-          <Toaster />
-          {children}
+            <ModalProvider />
+            <Toaster />
+            {children}
         </body>
       </html>
     </SessionProvider>

@@ -33,9 +33,9 @@ export const UserButton = () => {
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="end">
-                <DropdownMenuItem className="cursor-pointer" onClick={()=> navigate.push('/settings')}>
+                <DropdownMenuItem className="cursor-pointer" onClick={()=> navigate.push('/profile')}>
                     <GearIcon className="h-4 w-4 mr-2" />
-                    Settings
+                    Profile
                 </DropdownMenuItem>
                 <LogoutButton>
                     <DropdownMenuItem className="cursor-pointer">
