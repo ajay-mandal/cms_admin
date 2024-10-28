@@ -60,7 +60,7 @@ const ImageUpload: React.FC<ImageUploadProps> =({
                 uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                 options={{
                     resourceType: "image",
-                    clientAllowedFormats: ["jpg", "jpeg", "png", "gif"],
+                    clientAllowedFormats: ["jpg", "jpeg", "png", "gif"]
                   }}
                 >
                 {({open}) => {

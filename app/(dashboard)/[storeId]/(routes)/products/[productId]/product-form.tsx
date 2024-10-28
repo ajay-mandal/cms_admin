@@ -35,6 +35,7 @@ import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-model";
 import ImageUpload from "@/components/ui/image-upload";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
     name: z.string().min(1, {
@@ -52,6 +53,12 @@ const formSchema = z.object({
     }),
     sizeId: z.string().min(1, {
         message:"Add the available size"
+    }),
+    quantity: z.coerce.number().min(1, {
+        message:"Add the available quantity"
+    }),
+    description: z.string().min(10, {
+        message: "Add some description about the product"
     }),
     isFeatured: z.boolean().default(false).optional(),
     isArchived: z.boolean().default(false).optional(),
@@ -83,7 +90,7 @@ export const ProductForm: React.FC<ProductProps> = ({
     const [loading, setLoading] = useState(false);
 
     const title = initialData ? "Edit product" : "Create product";
-    const description = initialData ? "Edit a product" : "Add a new product";
+    const descriptions = initialData ? "Edit a product" : "Add a new product";
     const toastMessage = initialData ? "Product updated." : "Product created.";
     const action = initialData ? "Save changes" : "Create";
 
@@ -101,6 +108,8 @@ export const ProductForm: React.FC<ProductProps> = ({
             sizeId: '',
             isFeatured: false,
             isArchived: false,
+            quantity: 0,
+            description: ''
         }
     });
 
@@ -148,7 +157,7 @@ export const ProductForm: React.FC<ProductProps> = ({
             <div className="flex items-center justify-between">
                 <Heading
                 title={title}
-                description={description}
+                description={descriptions}
                 />
                 {initialData && (                
                     <Button
@@ -174,7 +183,12 @@ export const ProductForm: React.FC<ProductProps> = ({
                                     <ImageUpload
                                     value={field.value.map((image) => image.url)}
                                     disable={loading}
-                                    onChange={(url) => field.onChange([...field.value, { url }])}
+                                    onChange={(url) => { 
+                                        const currentImages = form.getValues("images"); 
+                                        const newImage = { url: url }; 
+                                        const updatedImages = [...currentImages, newImage]; 
+                                        form.setValue("images", updatedImages, { shouldValidate: true }); 
+                                    }}
                                     onRemove={(url)=> field.onChange([...field.value.filter((current)=> current.url !== url)])}
                                     />
                                 </FormControl>
@@ -204,6 +218,32 @@ export const ProductForm: React.FC<ProductProps> = ({
                                 <FormLabel>Price</FormLabel>
                                 <FormControl>
                                     <Input type="number" disabled={loading} placeholder="9.99" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        <FormField 
+                        control={form.control}
+                        name="quantity"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Quantity</FormLabel>
+                                <FormControl>
+                                    <Input type="number" disabled={loading} placeholder="10" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        <FormField 
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                    <Textarea  disabled={loading} placeholder="Product description" {...field}/>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
