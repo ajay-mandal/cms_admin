@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { CellAction } from "./cell-action"
+import { Size } from "@prisma/client";
 
 export type ProductColumn = {
   id: string;
@@ -13,6 +14,7 @@ export type ProductColumn = {
   size: string;
   color: string;
   createdAt: string;
+  quantity: string;
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -42,16 +44,11 @@ export const columns: ColumnDef<ProductColumn>[] = [
   },
   {
     accessorKey: "color",
-    header: "Color",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-x-2">
-        {row.original.color}
-        <div 
-          className="h-6 w-6 rounded-full border"
-          style={{ backgroundColor: row.original.color}}
-        />
-      </div>
-    )
+    header: "Color"
+  },
+  {
+    accessorKey: "quantity",
+    header: "Quantity"
   },
   {
     accessorKey: "createdAt",

@@ -13,7 +13,7 @@ export async function POST (
         }
     
         const body = await req.json();
-        const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived } = body;
+        const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived, quantity, description } = body;
 
         if(!name) {
             return new NextResponse("Name is required", {status: 400});
@@ -31,8 +31,14 @@ export async function POST (
         if(!colorId) {
             return new NextResponse("colorId is required", {status: 400});
         }
-        if(!sizeId) {
-            return new NextResponse("sizeId is required", {status: 400});
+        if(!quantity) {
+            return new NextResponse("Available quantity is required", {status: 400});
+        }
+        if (!sizeId ) {
+            return new NextResponse("SizeId is required", { status: 400 });
+        }
+        if (!description ) {
+            return new NextResponse("Description is required", { status: 400 });
         }
 
         if(!params.storeId) {
@@ -56,7 +62,8 @@ export async function POST (
                 price, 
                 categoryId, 
                 colorId, 
-                sizeId, 
+                sizeId,
+                description,
                 images: {
                     createMany: {
                         data: [
@@ -64,6 +71,7 @@ export async function POST (
                         ]
                     }
                 },
+                quantity,
                 isFeatured, 
                 isArchived,
                 storeId: params.storeId
@@ -106,7 +114,7 @@ export async function GET (
                 images: true,
                 category: true,
                 color: true,
-                size: true
+                size: true,
             },
             orderBy: {
                 createdAt: 'desc'

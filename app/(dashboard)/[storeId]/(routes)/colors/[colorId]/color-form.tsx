@@ -20,11 +20,6 @@ import { AlertModal } from "@/components/modals/alert-model";
 const formSchema = z.object({
     name: z.string().min(1, {
         message:"Name is required"
-    }),
-    value: z.string().min(4, {
-        message:"Value must be > 2"
-    }).regex(/^#/, {
-        message: "Must be a valid hex code"
     })
 });
 
@@ -53,8 +48,7 @@ export const ColorForm: React.FC<ColorProps> = ({
     const form = useForm<ColorValues>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
-        name : '',
-        value: ''
+        name : ''
         }
     });
 
@@ -127,25 +121,6 @@ export const ColorForm: React.FC<ColorProps> = ({
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
                                     <Input disabled={loading} placeholder="Color name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        <FormField 
-                        control={form.control}
-                        name="value"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Value</FormLabel>
-                                <FormControl>
-                                    <div className="flex items-center gap-x-4">
-                                        <Input disabled={loading} placeholder="Color value" {...field} />
-                                        <div 
-                                            className="border p-4 rounded-full"
-                                            style={{ backgroundColor: field.value}}
-                                        />
-                                    </div>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

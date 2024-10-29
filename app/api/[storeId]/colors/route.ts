@@ -13,13 +13,10 @@ export async function POST (
         }
     
         const body = await req.json();
-        const { name, value } = body;
+        const { name} = body;
 
         if(!name) {
             return new NextResponse("Name is required", {status: 400});
-        }
-        if(!value) {
-            return new NextResponse("Value is required", {status: 400});
         }
 
         if(!params.storeId) {
@@ -40,7 +37,6 @@ export async function POST (
         const newColor = await db.color.create({
             data: {
                 name,
-                value,
                 storeId: params.storeId
             }
         });

@@ -35,14 +35,12 @@ export async function PATCH (
         }
     
         const body = await req.json();
-        const { name, value } = body;
+        const { name } = body;
 
         if(!name) {
             return new NextResponse("Name is required", {status: 400});
         }
-        if(!value) {
-            return new NextResponse("Value is required", {status: 400});
-        }
+
         if(!params.colorId) {
             return new NextResponse("color_ID is required", {status: 400});
         }
@@ -63,8 +61,7 @@ export async function PATCH (
                 id: params.colorId,
             },
             data: {
-                name,
-                value
+                name
             }
         });
 
