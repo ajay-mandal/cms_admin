@@ -4,12 +4,13 @@ import { ProductForm } from "./product-form";
 const ProductPage = async ({
     params
 }: {
-    params: { productId: string, storeId: string }
+    params: Promise<{ productId: string, storeId: string }>
 }) => {
+    const { productId, storeId } = await params;
 
     const product = await db.product.findUnique({
         where: {
-            id: params.productId
+            id: productId
         },
         include: {
             images: true
@@ -18,19 +19,19 @@ const ProductPage = async ({
 
     const categories = await db.category.findMany({
         where: {
-            storeId: params.storeId
+            storeId
         }
     });
 
     const sizes = await db.size.findMany({
         where: {
-            storeId: params.storeId
+            storeId
         }
     });
 
     const colors = await db.color.findMany({
         where: {
-            storeId: params.storeId
+            storeId
         }
     });
 

@@ -4,12 +4,13 @@ import { ColorForm } from "./color-form";
 const ColorPage = async ({
     params
 }: {
-    params: { colorId: string}
+    params: Promise<{ colorId: string}>
 }) => {
+    const { colorId } = await params;
 
     const color = await db.color.findUnique({
         where: {
-            id: params.colorId
+            id: colorId
         }
     });
 

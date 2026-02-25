@@ -4,20 +4,21 @@ import { redirect } from "next/navigation";
 import { SettingForm }from "./setting-form";
 
 interface SettingPageProps {
-    params: {
+    params: Promise<{
         storeId: string;
-    }
+    }>
 };
 
 const SettingPage: React.FC<SettingPageProps> = async({
     params
 }) => {
+    const { storeId } = await params;
 
     const userId = await currentIdServerSide();
 
     const store = await db.store.findFirst({
         where: {
-            id: params.storeId,
+            id: storeId,
             userId
         }
     });

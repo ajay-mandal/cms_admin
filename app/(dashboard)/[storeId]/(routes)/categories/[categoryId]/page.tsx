@@ -4,18 +4,19 @@ import { CategoryForm } from "./category-form";
 const CategoryPage = async ({
     params
 }: {
-    params: { categoryId: string, storeId: string}
+    params: Promise<{ categoryId: string, storeId: string}>
 }) => {
+    const { categoryId, storeId } = await params;
 
     const category = await db.category.findUnique({
         where: {
-            id: params.categoryId
+            id: categoryId
         }
     });
 
     const billboards = await db.billboard.findMany({
         where: {
-            storeId: params.storeId
+            storeId
         }
     })
 

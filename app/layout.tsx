@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 
 import "./globals.css";
 
 import { ModalProvider } from "@/providers/modal-provider";
+import { AuthSessionProvider } from "@/providers/session-provider";
 
 export const metadata: Metadata = {
   title: "CMS Admin",
@@ -31,14 +31,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SessionProvider>
-      <html lang="en">
-        <body>
-            <ModalProvider />
-            <Toaster />
-            {children}
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang="en">
+      <body>
+        <AuthSessionProvider>
+          <ModalProvider />
+          <Toaster />
+          {children}
+        </AuthSessionProvider>
+      </body>
+    </html>
   );
 }

@@ -9,12 +9,13 @@ import { ProductColumn } from "./components/columns";
 const ProductsPage = async({
     params
 }: {
-    params: {storeId: string}
+    params: Promise<{storeId: string}>
 }) => {
+    const { storeId } = await params;
 
     const products = await db.product.findMany({
         where: {
-            storeId: params.storeId
+            storeId
         },
         include: {
             category: true,

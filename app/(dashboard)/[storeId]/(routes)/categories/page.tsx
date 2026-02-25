@@ -7,12 +7,13 @@ import {CategoryColumn } from "./components/columns";
 const CategoriesPage = async({
     params
 }: {
-    params: {storeId: string}
+    params: Promise<{storeId: string}>
 }) => {
+    const { storeId } = await params;
 
     const categories = await db.category.findMany({
         where: {
-            storeId: params.storeId
+            storeId
         },
         include: {
             billboard: true,

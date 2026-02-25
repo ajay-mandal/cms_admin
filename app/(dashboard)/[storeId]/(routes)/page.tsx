@@ -12,16 +12,17 @@ import { formatter } from "@/lib/utils";
 import { Overview } from "@/components/overview";
 
 interface DashboardPageProps {
-    params: { storeId: string}
+    params: Promise<{ storeId: string}>
 }
 const DashboardPage: React.FC<DashboardPageProps> = async ({
     params
 }) => {
+    const { storeId } = await params;
 
-    const totalRevenue = await getTotalRevenue(params.storeId);
-    const salesCount = await getSalesCount(params.storeId);
-    const stockCount = await getStockCount(params.storeId);
-    const graphRevenue = await getGraphRevenue(params.storeId);
+    const totalRevenue = await getTotalRevenue(storeId);
+    const salesCount = await getSalesCount(storeId);
+    const stockCount = await getStockCount(storeId);
+    const graphRevenue = await getGraphRevenue(storeId);
     return ( 
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">

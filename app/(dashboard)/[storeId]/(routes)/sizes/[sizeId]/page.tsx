@@ -4,12 +4,13 @@ import { SizeForm } from "./size-form";
 const SizePage = async ({
     params
 }: {
-    params: { sizeId: string}
+    params: Promise<{ sizeId: string}>
 }) => {
+    const { sizeId } = await params;
 
     const size = await db.size.findUnique({
         where: {
-            id: params.sizeId
+            id: sizeId
         }
     });
 
